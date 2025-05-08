@@ -1,10 +1,10 @@
 {
   "id": "flashcards-obsidian",
-  "name": "Flashcards",
+  "name": "Zettelcards",
   "version": "1.6.5",
   "minAppVersion": "0.9.17",
-  "description": "Anki integration",
-  "author": "Alex Colucci",
-  "authorUrl": "https://github.com/reuseman",
+  "description": "Anki integration oriented towards Zettelkasten system",
+  "author": "Alex Colucci, Andrew Zaykin",
+  "authorUrl": "https://github.com/cyb1ove",
   "isDesktopOnly": true
 }
