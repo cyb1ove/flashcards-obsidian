@@ -7,7 +7,9 @@
     "dev": "rollup --config rollup.config.js -w --environment BUILD:dev",
     "build": "rollup --config rollup.config.js --environment BUILD:production",
     "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}' --quiet",
-    "test": "jest"
+    "lint:fix": "eslint 'src/**/*.{ts,tsx,js,jsx}' --quiet --fix",
+    "test": "jest",
+    "prepare": "husky"
   },
   "keywords": [
     "obsidian",
@@ -31,6 +33,7 @@
     "eslint-plugin-prettier": "^5.4.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "husky": "^9.1.7",
     "jest": "^29.2.2",
     "obsidian": "https://github.com/obsidianmd/obsidian-api/tarball/master",
     "rollup": "^2.52.2",
