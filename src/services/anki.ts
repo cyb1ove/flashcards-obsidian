@@ -1,4 +1,4 @@
-import { Card } from "src/entities/card";
+import { Card } from 'src/entities/card';
 import {
   sourceField,
   codeScript,
@@ -7,23 +7,23 @@ import {
   highlightCssBase64,
   codeDeckExtension,
   sourceDeckExtension,
-} from "src/conf/constants";
+} from 'src/conf/constants';
 
 export class Anki {
   public async createModels(
     sourceSupport: boolean,
-    codeHighlightSupport: boolean
+    codeHighlightSupport: boolean,
   ) {
     let models = this.getModels(sourceSupport, false);
     if (codeHighlightSupport) {
       models = models.concat(this.getModels(sourceSupport, true));
     }
 
-    return this.invoke("multi", 6, { actions: models });
+    return this.invoke('multi', 6, { actions: models });
   }
 
   public async createDeck(deckName: string): Promise<any> {
-    return this.invoke("createDeck", 6, { deck: deckName });
+    return this.invoke('createDeck', 6, { deck: deckName });
   }
 
   public async storeMediaFiles(cards: Card[]) {
@@ -32,47 +32,46 @@ export class Anki {
     for (const card of cards) {
       for (const media of card.getMedias()) {
         actions.push({
-          action: "storeMediaFile",
+          action: 'storeMediaFile',
           params: media,
         });
       }
     }
 
     if (actions) {
-      return this.invoke("multi", 6, { actions: actions });
-    } else {
-      return {};
+      return this.invoke('multi', 6, { actions });
     }
+    return {};
   }
 
   public async storeCodeHighlightMedias() {
-    const fileExists = await this.invoke("retrieveMediaFile", 6, {
-      filename: "_highlightInit.js",
+    const fileExists = await this.invoke('retrieveMediaFile', 6, {
+      filename: '_highlightInit.js',
     });
 
     if (!fileExists) {
       const highlightjs = {
-        action: "storeMediaFile",
+        action: 'storeMediaFile',
         params: {
-          filename: "_highlight.js",
+          filename: '_highlight.js',
           data: highlightjsBase64,
         },
       };
       const highlightjsInit = {
-        action: "storeMediaFile",
+        action: 'storeMediaFile',
         params: {
-          filename: "_highlightInit.js",
+          filename: '_highlightInit.js',
           data: hihglightjsInitBase64,
         },
       };
       const highlightjcss = {
-        action: "storeMediaFile",
+        action: 'storeMediaFile',
         params: {
-          filename: "_highlight.css",
+          filename: '_highlight.css',
           data: highlightCssBase64,
         },
       };
-      return this.invoke("multi", 6, {
+      return this.invoke('multi', 6, {
         actions: [highlightjs, highlightjsInit, highlightjcss],
       });
     }
@@ -83,8 +82,8 @@ export class Anki {
 
     cards.forEach((card) => notes.push(card.getCard(false)));
 
-    return this.invoke("addNotes", 6, {
-      notes: notes,
+    return this.invoke('addNotes', 6, {
+      notes,
     });
   }
 
@@ -107,48 +106,48 @@ export class Anki {
 
     for (const card of cards) {
       updateActions.push({
-        action: "updateNoteFields",
+        action: 'updateNoteFields',
         params: {
           note: card.getCard(true),
         },
       });
 
       updateActions = updateActions.concat(
-        this.mergeTags(card.oldTags, card.tags, card.id)
+        this.mergeTags(card.oldTags, card.tags, card.id),
       );
       ids.push(card.id);
     }
 
     // Update deck
     updateActions.push({
-      action: "changeDeck",
+      action: 'changeDeck',
       params: {
         cards: ids,
         deck: cards[0].deckName,
       },
     });
 
-    return this.invoke("multi", 6, { actions: updateActions });
+    return this.invoke('multi', 6, { actions: updateActions });
   }
 
   public async changeDeck(ids: number[], deckName: string) {
-    return await this.invoke("changeDeck", 6, { cards: ids, deck: deckName });
+    return await this.invoke('changeDeck', 6, { cards: ids, deck: deckName });
   }
 
   public async cardsInfo(ids: number[]) {
-    return await this.invoke("cardsInfo", 6, { cards: ids });
+    return await this.invoke('cardsInfo', 6, { cards: ids });
   }
 
   public async getCards(ids: number[]) {
-    return await this.invoke("notesInfo", 6, { notes: ids });
+    return await this.invoke('notesInfo', 6, { notes: ids });
   }
 
   public async deleteCards(ids: number[]) {
-    return this.invoke("deleteNotes", 6, { notes: ids });
+    return this.invoke('deleteNotes', 6, { notes: ids });
   }
 
   public async ping(): Promise<boolean> {
-    return (await this.invoke("version", 6)) === 6;
+    return (await this.invoke('version', 6)) === 6;
   }
 
   private mergeTags(oldTags: string[], newTags: string[], cardId: number) {
@@ -161,7 +160,7 @@ export class Anki {
         oldTags.splice(index, 1);
       } else {
         actions.push({
-          action: "addTags",
+          action: 'addTags',
           params: {
             notes: [cardId],
             tags: tag,
@@ -173,7 +172,7 @@ export class Anki {
     // All Tags to delete
     for (const tag of oldTags) {
       actions.push({
-        action: "removeTags",
+        action: 'removeTags',
         params: {
           notes: [cardId],
           tags: tag,
@@ -187,18 +186,18 @@ export class Anki {
   private invoke(action: string, version = 6, params = {}): any {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.addEventListener("error", () => reject("failed to issue request"));
-      xhr.addEventListener("load", () => {
+      xhr.addEventListener('error', () => reject('failed to issue request'));
+      xhr.addEventListener('load', () => {
         try {
           const response = JSON.parse(xhr.responseText);
           if (Object.getOwnPropertyNames(response).length != 2) {
-            throw "response has an unexpected number of fields";
+            throw 'response has an unexpected number of fields';
           }
-          if (!Object.prototype.hasOwnProperty.call(response, "error")) {
-            throw "response is missing required error field";
+          if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
+            throw 'response is missing required error field';
           }
-          if (!Object.prototype.hasOwnProperty.call(response, "result")) {
-            throw "response is missing required result field";
+          if (!Object.prototype.hasOwnProperty.call(response, 'result')) {
+            throw 'response is missing required result field';
           }
           if (response.error) {
             throw response.error;
@@ -209,31 +208,30 @@ export class Anki {
         }
       });
 
-      xhr.open("POST", "http://127.0.0.1:8765");
+      xhr.open('POST', 'http://127.0.0.1:8765');
       xhr.send(JSON.stringify({ action, version, params }));
     });
   }
 
   private getModels(
     sourceSupport: boolean,
-    codeHighlightSupport: boolean
+    codeHighlightSupport: boolean,
   ): object[] {
-    let sourceFieldContent = "";
-    let codeScriptContent = "";
-    let sourceExtension = "";
-    let codeExtension = "";
+    let sourceFieldContent = '';
+    let codeScriptContent = '';
+    let sourceExtension = '';
+    let codeExtension = '';
     if (sourceSupport) {
-      sourceFieldContent = "\r\n" + sourceField;
+      sourceFieldContent = `\r\n${sourceField}`;
       sourceExtension = sourceDeckExtension;
     }
 
     if (codeHighlightSupport) {
-      codeScriptContent = "\r\n" + codeScript + "\r\n";
+      codeScriptContent = `\r\n${codeScript}\r\n`;
       codeExtension = codeDeckExtension;
     }
 
-    const css =
-      '.card {\r\n font-family: arial;\r\n font-size: 20px;\r\n text-align: center;\r\n color: black;\r\n background-color: white;\r\n}\r\n\r\n.tag::before {\r\n\tcontent: "#";\r\n}\r\n\r\n.tag {\r\n  color: white;\r\n  background-color: #9F2BFF;\r\n  border: none;\r\n  font-size: 11px;\r\n  font-weight: bold;\r\n  padding: 1px 8px;\r\n  margin: 0px 3px;\r\n  text-align: center;\r\n  text-decoration: none;\r\n  cursor: pointer;\r\n  border-radius: 14px;\r\n  display: inline;\r\n  vertical-align: middle;\r\n}\r\n .cloze { font-weight: bold; color: blue;}.nightMode .cloze { color: lightblue;}';
+    const css = '.card {\r\n font-family: arial;\r\n font-size: 20px;\r\n text-align: center;\r\n color: black;\r\n background-color: white;\r\n}\r\n\r\n.tag::before {\r\n\tcontent: "#";\r\n}\r\n\r\n.tag {\r\n  color: white;\r\n  background-color: #9F2BFF;\r\n  border: none;\r\n  font-size: 11px;\r\n  font-weight: bold;\r\n  padding: 1px 8px;\r\n  margin: 0px 3px;\r\n  text-align: center;\r\n  text-decoration: none;\r\n  cursor: pointer;\r\n  border-radius: 14px;\r\n  display: inline;\r\n  vertical-align: middle;\r\n}\r\n .cloze { font-weight: bold; color: blue;}.nightMode .cloze { color: lightblue;}';
     const front = `{{Front}}\r\n<p class=\"tags\">{{Tags}}<\/p>\r\n\r\n<script>\r\n    var tagEl = document.querySelector(\'.tags\');\r\n    var tags = tagEl.innerHTML.split(\' \');\r\n    var html = \'\';\r\n    tags.forEach(function(tag) {\r\n\tif (tag) {\r\n\t    var newTag = \'<span class=\"tag\">\' + tag + \'<\/span>\';\r\n           html += newTag;\r\n    \t    tagEl.innerHTML = html;\r\n\t}\r\n    });\r\n    \r\n<\/script>${codeScriptContent}`;
     const back = `{{FrontSide}}\n\n<hr id=answer>\n\n{{Back}}${sourceFieldContent}`;
     const frontReversed = `{{Back}}\r\n<p class=\"tags\">{{Tags}}<\/p>\r\n\r\n<script>\r\n    var tagEl = document.querySelector(\'.tags\');\r\n    var tags = tagEl.innerHTML.split(\' \');\r\n    var html = \'\';\r\n    tags.forEach(function(tag) {\r\n\tif (tag) {\r\n\t    var newTag = \'<span class=\"tag\">\' + tag + \'<\/span>\';\r\n           html += newTag;\r\n    \t    tagEl.innerHTML = html;\r\n\t}\r\n    });\r\n    \r\n<\/script>${codeScriptContent}`;
@@ -243,24 +241,24 @@ export class Anki {
     const clozeFront = `{{cloze:Text}}\n\n<script>\r\n    var tagEl = document.querySelector(\'.tags\');\r\n    var tags = tagEl.innerHTML.split(\' \');\r\n    var html = \'\';\r\n    tags.forEach(function(tag) {\r\n\tif (tag) {\r\n\t    var newTag = \'<span class=\"tag\">\' + tag + \'<\/span>\';\r\n           html += newTag;\r\n    \t    tagEl.innerHTML = html;\r\n\t}\r\n    });\r\n    \r\n<\/script>${codeScriptContent}`;
     const clozeBack = `{{cloze:Text}}\n\n<br>{{Extra}}${sourceFieldContent}<script>\r\n    var tagEl = document.querySelector(\'.tags\');\r\n    var tags = tagEl.innerHTML.split(\' \');\r\n    var html = \'\';\r\n    tags.forEach(function(tag) {\r\n\tif (tag) {\r\n\t    var newTag = \'<span class=\"tag\">\' + tag + \'<\/span>\';\r\n           html += newTag;\r\n    \t    tagEl.innerHTML = html;\r\n\t}\r\n    });\r\n    \r\n<\/script>${codeScriptContent}`;
 
-    let classicFields = ["Front", "Back"];
-    let promptFields = ["Prompt"];
-    let clozeFields = ["Text", "Extra"];
+    let classicFields = ['Front', 'Back'];
+    let promptFields = ['Prompt'];
+    let clozeFields = ['Text', 'Extra'];
     if (sourceSupport) {
-      classicFields = classicFields.concat("Source");
-      promptFields = promptFields.concat("Source");
-      clozeFields = clozeFields.concat("Source");
+      classicFields = classicFields.concat('Source');
+      promptFields = promptFields.concat('Source');
+      clozeFields = clozeFields.concat('Source');
     }
 
     const obsidianBasic = {
-      action: "createModel",
+      action: 'createModel',
       params: {
         modelName: `Obsidian-basic${sourceExtension}${codeExtension}`,
         inOrderFields: classicFields,
-        css: css,
+        css,
         cardTemplates: [
           {
-            Name: "Front / Back",
+            Name: 'Front / Back',
             Front: front,
             Back: back,
           },
@@ -269,19 +267,19 @@ export class Anki {
     };
 
     const obsidianBasicReversed = {
-      action: "createModel",
+      action: 'createModel',
       params: {
         modelName: `Obsidian-basic-reversed${sourceExtension}${codeExtension}`,
         inOrderFields: classicFields,
-        css: css,
+        css,
         cardTemplates: [
           {
-            Name: "Front / Back",
+            Name: 'Front / Back',
             Front: front,
             Back: back,
           },
           {
-            Name: "Back / Front",
+            Name: 'Back / Front',
             Front: frontReversed,
             Back: backReversed,
           },
@@ -290,32 +288,32 @@ export class Anki {
     };
 
     const obsidianCloze = {
-      action: "createModel",
+      action: 'createModel',
       params: {
         modelName: `Obsidian-cloze${sourceExtension}${codeExtension}`,
         inOrderFields: clozeFields,
-        css: css,
+        css,
         isCloze: true,
         cardTemplates: [
           {
-            Name: "Cloze",
+            Name: 'Cloze',
             Front: clozeFront,
             Back: clozeBack,
           },
         ],
       },
-      
-    }
+
+    };
 
     const obsidianSpaced = {
-      action: "createModel",
+      action: 'createModel',
       params: {
         modelName: `Obsidian-spaced${sourceExtension}${codeExtension}`,
         inOrderFields: promptFields,
-        css: css,
+        css,
         cardTemplates: [
           {
-            Name: "Spaced",
+            Name: 'Spaced',
             Front: prompt,
             Back: promptBack,
           },
@@ -327,6 +325,6 @@ export class Anki {
   }
 
   public async requestPermission() {
-    return this.invoke("requestPermission", 6);
+    return this.invoke('requestPermission', 6);
   }
 }

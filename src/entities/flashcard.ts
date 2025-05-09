@@ -13,7 +13,7 @@ export class Flashcard extends Card {
     tags: string[] = [],
     inserted = false,
     mediaNames: string[],
-    containsCode: boolean
+    containsCode: boolean,
   ) {
     super(
       id,
@@ -26,11 +26,9 @@ export class Flashcard extends Card {
       tags,
       inserted,
       mediaNames,
-      containsCode
+      containsCode,
     );
-    this.modelName = this.reversed
-      ? `Obsidian-basic-reversed`
-      : `Obsidian-basic`;
+    this.modelName = this.reversed ? `Obsidian-basic-reversed` : `Obsidian-basic`;
     if (fields["Source"]) {
       this.modelName += sourceDeckExtension;
     }

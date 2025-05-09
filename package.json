@@ -1,11 +1,12 @@
 {
-  "name": "flashcards",
+  "name": "zettelcards",
   "version": "0.2.0",
-  "description": "An Anki integration.",
+  "description": "Anki integration oriented towards Zettelkasten system",
   "main": "main.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w --environment BUILD:dev",
     "build": "rollup --config rollup.config.js --environment BUILD:production",
+    "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}' --quiet",
     "test": "jest"
   },
   "keywords": [
@@ -23,7 +24,13 @@
     "@types/node": "^14.17.4",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
-    "eslint": "^8.4.1",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "jest": "^29.2.2",
     "obsidian": "https://github.com/obsidianmd/obsidian-api/tarball/master",
     "rollup": "^2.52.2",
