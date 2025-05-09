@@ -69,10 +69,7 @@ export class CardsService {
 
     try {
       this.anki.storeCodeHighlightMedias();
-      await this.anki.createModels(
-        this.settings.sourceSupport,
-        this.settings.codeHighlightSupport
-      );
+      await this.anki.createModels(this.settings.sourceSupport, this.settings.codeHighlightSupport);
       await this.anki.createDeck(deckName);
       this.file = await this.app.vault.read(activeFile);
       if (!this.file.endsWith("\n")) {
@@ -90,10 +87,9 @@ export class CardsService {
         deckName,
         vaultName,
         filePath,
-        globalTags
+        globalTags,
       );
-      const [cardsToCreate, cardsToUpdate, cardsNotInAnki] =
-        this.filterByUpdate(ankiCards, cards);
+      const [cardsToCreate, cardsToUpdate, cardsNotInAnki] = this.filterByUpdate(ankiCards, cards);
       const cardIds: number[] = this.getCardsIds(ankiCards, cards);
       const cardsToDelete: number[] = this.parser.getCardsToDelete(this.file);
 
@@ -106,9 +102,7 @@ export class CardsService {
       if (cardsNotInAnki) {
         console.info("Flashcards: Cards not in Anki (maybe deleted)");
         for (const card of cardsNotInAnki) {
-          this.notifications.push(
-            `Error: Card with ID ${card.id} is not in Anki!`
-          );
+          this.notifications.push(`Error: Card with ID ${card.id} is not in Anki!`);
         }
       }
       console.info(cardsNotInAnki);
@@ -119,10 +113,7 @@ export class CardsService {
       await this.insertCardsOnAnki(cardsToCreate, frontmatter, deckName);
 
       // Update decks if needed
-      const deckNeedToBeChanged = await this.deckNeedToBeChanged(
-        cardIds,
-        deckName
-      );
+      const deckNeedToBeChanged = await this.deckNeedToBeChanged(cardIds, deckName);
       if (deckNeedToBeChanged) {
         try {
           this.anki.changeDeck(cardIds, deckName);
@@ -170,7 +161,7 @@ export class CardsService {
         for (const media of card.mediaNames) {
           const image = this.app.metadataCache.getFirstLinkpathDest(
             decodeURIComponent(media),
-            sourcePath
+            sourcePath,
           );
           try {
             const binaryMedia = await this.app.vault.readBinary(image);
@@ -186,7 +177,7 @@ export class CardsService {
   private async insertCardsOnAnki(
     cardsToCreate: Card[],
     frontmatter: FrontMatterCache,
-    deckName: string
+    deckName: string,
   ): Promise<number> {
     if (cardsToCreate.length) {
       let insertedCards = 0;
@@ -200,10 +191,7 @@ export class CardsService {
         let total = 0;
         cardsToCreate.forEach((card) => {
           if (card.id === null) {
-            new Notice(
-              `Error, could not add: '${card.initialContent}'`,
-              noticeTimeout
-            );
+            new Notice(`Error, could not add: '${card.initialContent}'`, noticeTimeout);
           } else {
             card.reversed ? (insertedCards += 2) : insertedCards++;
           }
@@ -213,9 +201,7 @@ export class CardsService {
         this.updateFrontmatter(frontmatter, deckName);
         this.writeAnkiBlocks(cardsToCreate);
 
-        this.notifications.push(
-          `Inserted successfully ${insertedCards}/${total} cards.`
-        );
+        this.notifications.push(`Inserted successfully ${insertedCards}/${total} cards.`);
         return insertedCards;
       } catch (err) {
         console.error(err);
@@ -230,20 +216,15 @@ export class CardsService {
     if (frontmatter) {
       const oldFrontmatter: string = this.file.substring(
         frontmatter.position.start.offset,
-        frontmatter.position.end.offset
+        frontmatter.position.end.offset,
       );
       if (!oldFrontmatter.match(this.regex.cardsDeckLine)) {
         newFrontmatter =
-          oldFrontmatter.substring(0, oldFrontmatter.length - 3) +
-          cardsDeckLine +
-          "---";
+          oldFrontmatter.substring(0, oldFrontmatter.length - 3) + cardsDeckLine + "---";
         this.totalOffset += cardsDeckLine.length;
         this.file =
           newFrontmatter +
-          this.file.substring(
-            frontmatter.position.end.offset,
-            this.file.length + 1
-          );
+          this.file.substring(frontmatter.position.end.offset, this.file.length + 1);
       }
     } else {
       newFrontmatter = `---\n${cardsDeckLine}---\n\n`;
@@ -270,9 +251,7 @@ export class CardsService {
 
         this.updateFile = true;
         this.file =
-          this.file.substring(0, offset) +
-          id +
-          this.file.substring(offset, this.file.length + 1);
+          this.file.substring(0, offset) + id + this.file.substring(offset, this.file.length + 1);
         this.totalOffset += id.length;
       }
     }
@@ -282,9 +261,7 @@ export class CardsService {
     if (cards.length) {
       try {
         this.anki.updateCards(cards);
-        this.notifications.push(
-          `Updated successfully ${cards.length}/${cards.length} cards.`
-        );
+        this.notifications.push(`Updated successfully ${cards.length}/${cards.length} cards.`);
       } catch (err) {
         console.error(err);
         Error("Error: Could not update cards on Anki");
@@ -294,10 +271,7 @@ export class CardsService {
     }
   }
 
-  public async deleteCardsOnAnki(
-    cards: number[],
-    ankiBlocks: RegExpMatchArray[]
-  ): Promise<number> {
+  public async deleteCardsOnAnki(cards: number[], ankiBlocks: RegExpMatchArray[]): Promise<number> {
     if (cards.length) {
       let deletedCards = 0;
       for (const block of ankiBlocks) {
@@ -312,14 +286,9 @@ export class CardsService {
             this.updateFile = true;
             this.file =
               this.file.substring(0, block["index"]) +
-              this.file.substring(
-                block["index"] + block[0].length,
-                this.file.length
-              );
+              this.file.substring(block["index"] + block[0].length, this.file.length);
             this.totalOffset -= block[0].length;
-            this.notifications.push(
-              `Deleted successfully ${deletedCards}/${cards.length} cards.`
-            );
+            this.notifications.push(`Deleted successfully ${deletedCards}/${cards.length} cards.`);
           } catch (err) {
             console.error(err);
             Error("Error, could not delete the card from Anki");
@@ -351,9 +320,7 @@ export class CardsService {
         // 	(the user can always delete it) be in Anki
         let ankiCard = undefined;
         if (flashcard.inserted) {
-          ankiCard = ankiCards.filter(
-            (card: any) => Number(card.noteId) === flashcard.id
-          )[0];
+          ankiCard = ankiCards.filter((card: any) => Number(card.noteId) === flashcard.id)[0];
           if (!ankiCard) {
             cardsNotInAnki.push(flashcard);
           } else if (!flashcard.match(ankiCard)) {
@@ -389,9 +356,7 @@ export class CardsService {
       for (const flashcard of generatedCards) {
         let ankiCard = undefined;
         if (flashcard.inserted) {
-          ankiCard = ankiCards.filter(
-            (card: any) => Number(card.noteId) === flashcard.id
-          )[0];
+          ankiCard = ankiCards.filter((card: any) => Number(card.noteId) === flashcard.id)[0];
           if (ankiCard) {
             ids = ids.concat(ankiCard.cards);
           }

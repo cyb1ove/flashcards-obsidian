@@ -13,7 +13,7 @@ export class Inlinecard extends Card {
     tags: string[] = [],
     inserted = false,
     mediaNames: string[],
-    containsCode: boolean
+    containsCode: boolean,
   ) {
     super(
       id,
@@ -26,12 +26,10 @@ export class Inlinecard extends Card {
       tags,
       inserted,
       mediaNames,
-      containsCode
+      containsCode,
     ); // ! CHANGE []
 
-    this.modelName = this.reversed
-      ? `Obsidian-basic-reversed`
-      : `Obsidian-basic`;
+    this.modelName = this.reversed ? `Obsidian-basic-reversed` : `Obsidian-basic`;
     if (fields["Source"]) {
       this.modelName += sourceDeckExtension;
     }

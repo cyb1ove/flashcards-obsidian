@@ -12,7 +12,7 @@ import {
 export class Anki {
   public async createModels(
     sourceSupport: boolean,
-    codeHighlightSupport: boolean,
+    codeHighlightSupport: boolean
   ) {
     let models = this.getModels(sourceSupport, false);
     if (codeHighlightSupport) {
