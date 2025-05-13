@@ -39,13 +39,10 @@ export function escapeMarkdown(string: string, skips: string[] = []) {
 
   return replacements.reduce(function (s: string, replacement: any) {
     const name = replacement[2];
-    return name && skips.indexOf(name) !== -1
-      ? s
-      : s.replace(replacement[0], replacement[1]);
+    return name && skips.indexOf(name) !== -1 ? s : s.replace(replacement[0], replacement[1]);
   }, string);
 }
 
-
-  export function escapeRegExp(str: string) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
-  }
+export function escapeRegExp(str: string) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+}

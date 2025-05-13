@@ -12,7 +12,10 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "**/*.{ts.js}": ["eslint --fix", "prettier --write"]
+    "**/*.{ts.js}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   },
   "keywords": [
     "obsidian",
