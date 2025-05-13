@@ -7,9 +7,9 @@ import {
   HIHGLIGHTJS_INIT_BASE64,
   SOURCE_DECK_EXTENSION,
   SOURCE_FIELD,
-} from 'src/conf/constants';
+} from "src/conf/constants";
 
-import * as templates from './cards/templates';
+import * as templates from "./cards/templates";
 
 interface ModelParams {
   modelName: string;
@@ -66,21 +66,21 @@ export class Anki {
         action: "storeMediaFile",
         params: {
           filename: "_highlight.js",
-          data: highlightjsBase64,
+          data: HIGHLIGHTJS_BASE64,
         },
       };
       const highlightjsInit = {
         action: "storeMediaFile",
         params: {
           filename: "_highlightInit.js",
-          data: hihglightjsInitBase64,
+          data: HIHGLIGHTJS_INIT_BASE64,
         },
       };
       const highlightjcss = {
         action: "storeMediaFile",
         params: {
           filename: "_highlight.css",
-          data: highlightCssBase64,
+          data: HIGHLIGHT_CSS_BASE64,
         },
       };
       return this.invoke("multi", 6, {
@@ -224,10 +224,10 @@ export class Anki {
   }
 
   private getModels(sourceSupport: boolean, codeHighlightSupport: boolean): Model[] {
-    const sourceExtension = sourceSupport ? SOURCE_DECK_EXTENSION : '';
-    const sourceFieldContent = sourceSupport ? SOURCE_FIELD : '';
-    const codeExtension = codeHighlightSupport ? CODE_DECK_EXTENSION : '';
-    const codeScriptContent = codeHighlightSupport ? CODE_SCRIPT : '';
+    const sourceExtension = sourceSupport ? SOURCE_DECK_EXTENSION : "";
+    const sourceFieldContent = sourceSupport ? SOURCE_FIELD : "";
+    const codeExtension = codeHighlightSupport ? CODE_DECK_EXTENSION : "";
+    const codeScriptContent = codeHighlightSupport ? CODE_SCRIPT : "";
 
     const css = templates.formatStyle();
     const front = templates.formatBasicFront(codeScriptContent);
@@ -251,11 +251,11 @@ export class Anki {
       isCloze?: boolean;
     }): Model => {
       if (sourceSupport) {
-        fields.push('Source');
+        fields.push("Source");
       }
 
       return {
-        action: 'createModel',
+        action: "createModel",
         params: {
           modelName: `Obsidian-${name}${sourceExtension}${codeExtension}`,
           inOrderFields: fields,
@@ -271,28 +271,28 @@ export class Anki {
     };
 
     const basic = makeModel({
-      name: 'basic',
-      fields: ['Front', 'Back'],
-      templates: [{ name: 'Front / Back', front, back }],
+      name: "basic",
+      fields: ["Front", "Back"],
+      templates: [{ name: "Front / Back", front, back }],
     });
     const reversed = makeModel({
-      name: 'basic-reversed',
-      fields: ['Front', 'Back'],
+      name: "basic-reversed",
+      fields: ["Front", "Back"],
       templates: [
-        { name: 'Front / Back', front, back },
-        { name: 'Back / Front', front: frontReversed, back: backReversed },
+        { name: "Front / Back", front, back },
+        { name: "Back / Front", front: frontReversed, back: backReversed },
       ],
     });
     const cloze = makeModel({
-      name: 'cloze',
-      fields: ['Text', 'Extra'],
+      name: "cloze",
+      fields: ["Text", "Extra"],
       isCloze: true,
-      templates: [{ name: 'Cloze', front: clozeFront, back: clozeBack }],
+      templates: [{ name: "Cloze", front: clozeFront, back: clozeBack }],
     });
     const spaced = makeModel({
-      name: 'spaced',
-      fields: ['Prompt'],
-      templates: [{ name: 'Spaced', front: prompt, back: promptBack }],
+      name: "spaced",
+      fields: ["Prompt"],
+      templates: [{ name: "Spaced", front: prompt, back: promptBack }],
     });
 
     return [basic, reversed, cloze, spaced];
