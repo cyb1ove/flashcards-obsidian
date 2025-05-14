@@ -1,4 +1,4 @@
-import { codeDeckExtension } from "src/conf/constants";
+import { CODE_DECK_EXTENSION } from "src/conf/constants";
 import { arraysEqual } from "src/utils";
 
 export abstract class Card {
@@ -74,6 +74,6 @@ export abstract class Card {
   }
 
   getCodeDeckNameExtension() {
-    return this.containsCode ? codeDeckExtension : "";
+    return this.containsCode ? CODE_DECK_EXTENSION : "";
   }
 }

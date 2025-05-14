@@ -12,7 +12,7 @@ import { ISettings } from "src/conf/settings";
 import { Card } from "src/entities/card";
 import { arrayBufferToBase64 } from "src/utils";
 import { Regex } from "src/conf/regex";
-import { noticeTimeout } from "src/conf/constants";
+import { NOTICE_TIMEOUT } from "src/conf/constants";
 import { Inlinecard } from "src/entities/inlinecard";
 
 export class CardsService {
@@ -191,7 +191,7 @@ export class CardsService {
         let total = 0;
         cardsToCreate.forEach((card) => {
           if (card.id === null) {
-            new Notice(`Error, could not add: '${card.initialContent}'`, noticeTimeout);
+            new Notice(`Error, could not add: '${card.initialContent}'`, NOTICE_TIMEOUT);
           } else {
             card.reversed ? (insertedCards += 2) : insertedCards++;
           }

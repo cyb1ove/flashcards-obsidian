@@ -6,7 +6,9 @@
     "extends": [
         "eslint:recommended",
         "plugin:prettier/recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -17,5 +19,14 @@
         "prettier",
         "@typescript-eslint"
     ],
-    "rules": {}
+    "rules": {
+        "import/named": "error"
+    },
+    "settings": {
+        "import/resolver": {
+            "typescript": {
+                "project": "./tsconfig.json"
+            }
+        }
+    }
 }

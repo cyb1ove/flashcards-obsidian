@@ -1,4 +1,4 @@
-import { ISettings } from "src/conf/settings";
+import { ISettings } from "./settings";
 
 export class Regex {
   headingsRegex: RegExp;

@@ -1,6 +1,4 @@
-import dedent from "dedent";
-
-export const formatStyle = () => dedent`
+export const formatStyle = () => `
   .card {
     font-family: arial;
     font-size: 20px;
@@ -35,7 +33,7 @@ export const formatStyle = () => dedent`
   }
   `;
 
-const displayTagsScript = dedent`
+const displayTagsScript = `
   <script>
   var tagEl = document.querySelector('.tags');
   var tags = tagEl.innerHTML.split(' ');
@@ -50,55 +48,55 @@ const displayTagsScript = dedent`
   </script>
   `;
 
-export const formatBasicFront = (codeScriptContent: string) => dedent`
+export const formatBasicFront = (codeScriptContent: string) => `
   {{Front}}
   <p class="tags">{{Tags}}</p>
   ${displayTagsScript}
   ${codeScriptContent}
   `;
 
-export const formatBasicBack = (sourceFieldContent: string) => dedent`
+export const formatBasicBack = (sourceFieldContent: string) => `
   {{FrontSide}}
   <hr id="answer">
   {{Back}}
   ${sourceFieldContent}
   `;
 
-export const formatReversedFront = (codeScriptContent: string) => dedent`
+export const formatReversedFront = (codeScriptContent: string) => `
   {{Back}}
   <p class="tags">{{Tags}}</p>
   ${displayTagsScript}
   ${codeScriptContent}
   `;
 
-export const formatReversedBack = (sourceFieldContent: string) => dedent`
+export const formatReversedBack = (sourceFieldContent: string) => `
   {{FrontSide}}
   <hr id="answer">
   {{Front}}
   ${sourceFieldContent}
   `;
 
-export const formatPromptFront = (codeScriptContent: string) => dedent`
+export const formatPromptFront = (codeScriptContent: string) => `
   {{Prompt}}
   <p class="tags">🧠spaced {{Tags}}</p>
   ${displayTagsScript}
   ${codeScriptContent}
   `;
 
-export const formatPromptBack = (sourceFieldContent: string) => dedent`
+export const formatPromptBack = (sourceFieldContent: string) => `
   {{FrontSide}}
   <hr id="answer">
   🧠 Review done.
   ${sourceFieldContent}
   `;
 
-export const formatClozeFront = (codeScriptContent: string) => dedent`
+export const formatClozeFront = (codeScriptContent: string) => `
   {{cloze:Text}}
   ${displayTagsScript}
   ${codeScriptContent}
   `;
 
-export const formatClozeBack = (sourceFieldContent: string, codeScriptContent: string) => dedent`
+export const formatClozeBack = (sourceFieldContent: string, codeScriptContent: string) => `
   {{cloze:Text}}
   <br>
   {{Extra}}
