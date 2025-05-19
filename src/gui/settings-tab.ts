@@ -156,6 +156,16 @@ export class SettingsTab extends PluginSettingTab {
       });
 
     new Setting(containerEl)
+      .setName("Zettelkasten cards identification mode")
+      .setDesc("Identify zettelkasten cards if tag isn't set.")
+      .addToggle((toggle) => {
+        toggle.setValue(plugin.settings.zettelkastenCardsIdentificationMode).onChange((value) => {
+          plugin.settings.zettelkastenCardsIdentificationMode = value;
+          plugin.saveData(plugin.settings);
+        });
+      });
+
+    new Setting(containerEl)
       .setName("Inline card separator")
       .setDesc("The separator to identifty the inline cards in the notes.")
       .addText((text) => {

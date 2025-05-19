@@ -75,6 +75,7 @@ export default class ObsidianFlashcard extends Plugin {
       inlineSeparatorReverse: ":::",
       defaultAnkiTag: "obsidian",
       ankiConnectPermission: false,
+      zettelkastenCardsIdentificationMode: false,
     };
   }
 

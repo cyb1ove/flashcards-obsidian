@@ -10,5 +10,6 @@
   "inlineSeparator": "::",
   "inlineSeparatorReverse": ":::",
   "defaultAnkiTag": "",
-  "ankiConnectPermission": true
+  "ankiConnectPermission": true,
+  "zettelkastenCardsIdentificationMode": true
 }
