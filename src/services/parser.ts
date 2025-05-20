@@ -41,16 +41,13 @@ export class Parser {
       headings = [...file.matchAll(this.regex.headingsRegex)];
     }
 
-    note = this.substituteObsidianLinks(`[[${note}]]`, vault);
     cards = cards.concat(this.generateCardsWithTag(file, headings, deck, vault, note, globalTags));
     cards = cards.concat(this.generateInlineCards(file, headings, deck, vault, note, globalTags));
     cards = cards.concat(this.generateSpacedCards(file, headings, deck, vault, note, globalTags));
     cards = cards.concat(this.generateClozeCards(file, headings, deck, vault, note, globalTags));
 
     if (cards.length === 0 && this.settings.zettelkastenCardsIdentificationMode) {
-      cards = cards.concat(
-        this.generateZettelkastenCards(file, headings, deck, vault, note, globalTags),
-      );
+      cards = cards.concat(this.generateZettelkastenCards(file, deck, vault, note, globalTags));
     }
 
     // Filter out cards that are fully inside a code block, a math block or a math inline block
@@ -159,7 +156,7 @@ export class Parser {
       const inserted: boolean = match[5] ? true : false;
       const fields: any = { Prompt: prompt };
       if (this.settings.sourceSupport) {
-        fields["Source"] = note;
+        fields["Source"] = this.substituteSourceLink(note, vault);
       }
       const containsCode = this.containsCode([prompt]);
 
@@ -252,7 +249,7 @@ export class Parser {
       const inserted: boolean = match[5] ? true : false;
       const fields: any = { Text: clozeText, Extra: "" };
       if (this.settings.sourceSupport) {
-        fields["Source"] = note;
+        fields["Source"] = this.substituteSourceLink(note, vault);
       }
       const containsCode = this.containsCode([clozeText]);
 
@@ -321,7 +318,7 @@ export class Parser {
       const inserted: boolean = match[6] ? true : false;
       const fields: any = { Front: question, Back: answer };
       if (this.settings.sourceSupport) {
-        fields["Source"] = note;
+        fields["Source"] = this.substituteSourceLink(note, vault);
       }
       const containsCode = this.containsCode([question, answer]);
 
@@ -389,7 +386,7 @@ export class Parser {
       const inserted: boolean = match[6] ? true : false;
       const fields: any = { Front: question, Back: answer };
       if (this.settings.sourceSupport) {
-        fields["Source"] = note;
+        fields["Source"] = this.substituteSourceLink(note, vault);
       }
       const containsCode = this.containsCode([question, answer]);
 
@@ -414,7 +411,6 @@ export class Parser {
 
   private generateZettelkastenCards(
     file: string,
-    _: any,
     deck: string,
     vault: string,
     note: string,
@@ -426,6 +422,9 @@ export class Parser {
     let medias = this.getImageLinks(answer);
     medias = medias.concat(this.getAudioLinks(answer));
     const fields: any = { Front: question, Back: answer };
+    if (this.settings.sourceSupport) {
+      fields["Source"] = this.substituteSourceLink(note, vault);
+    }
     const containsCode = this.containsCode([question, answer]);
 
     const card = new Flashcard(
@@ -515,6 +514,10 @@ export class Parser {
     str = str.replace(this.regex.markdownImageLinks, "<img src='$1'>");
 
     return str;
+  }
+
+  private substituteSourceLink(source: string, vaultName: string): string {
+    return this.substituteObsidianLinks(`[[${source}|Source]]`, vaultName);
   }
 
   private substituteAudioLinks(str: string): string {
