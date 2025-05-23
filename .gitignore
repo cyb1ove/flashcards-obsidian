@@ -8,7 +8,6 @@ package-lock.json
 
 # build
 main.js
-data.json
 *.js.map
 docs/test-vault/.obsidian/plugins/flashcards/main.js
 docs/test-vault/.obsidian/plugins/flashcards/manifest.json
@@ -17,6 +16,7 @@ docs/test-vault/.obsidian/plugins/flashcards/manifest.json
 move.sh
 
 # Visual Studio Code
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -35,3 +35,6 @@ docs/test-vault/.obsidian/workspace
 
 # Coverage config
 coverage/
+
+# Plugin files
+data.json

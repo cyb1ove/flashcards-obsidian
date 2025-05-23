@@ -13,3 +13,19 @@ export interface ISettings {
   ankiConnectPermission: boolean;
   zettelkastenCardsIdentificationMode: boolean;
 }
+
+export const defaultSettings: ISettings = {
+  contextAwareMode: true,
+  sourceSupport: false,
+  codeHighlightSupport: false,
+  inlineID: false,
+  contextSeparator: " > ",
+  deck: "Default",
+  folderBasedDeck: true,
+  flashcardsTag: "card",
+  inlineSeparator: "::",
+  inlineSeparatorReverse: ":::",
+  defaultAnkiTag: "obsidian",
+  ankiConnectPermission: false,
+  zettelkastenCardsIdentificationMode: false,
+};

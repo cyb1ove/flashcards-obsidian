@@ -1,5 +1,5 @@
 import { addIcon, Notice, Plugin, TFile } from "obsidian";
-import { ISettings } from "src/conf/settings";
+import { defaultSettings, ISettings } from "src/conf/settings";
 import { SettingsTab } from "src/gui/settings-tab";
 import { CardsService } from "src/services/cards";
 import { Anki } from "src/services/anki";
@@ -14,7 +14,7 @@ export default class ObsidianFlashcard extends Plugin {
 
     // TODO test when file did not insert flashcards, but one of them is in Anki already
     const anki = new Anki();
-    this.settings = (await this.loadData()) || this.getDefaultSettings();
+    this.settings = (await this.loadData()) || defaultSettings;
     this.cardsService = new CardsService(this.app, this.settings);
 
     const statusBar = this.addStatusBarItem();
@@ -59,24 +59,6 @@ export default class ObsidianFlashcard extends Plugin {
 
   async onunload() {
     await this.saveData(this.settings);
-  }
-
-  private getDefaultSettings(): ISettings {
-    return {
-      contextAwareMode: true,
-      sourceSupport: false,
-      codeHighlightSupport: false,
-      inlineID: false,
-      contextSeparator: " > ",
-      deck: "Default",
-      folderBasedDeck: true,
-      flashcardsTag: "card",
-      inlineSeparator: "::",
-      inlineSeparatorReverse: ":::",
-      defaultAnkiTag: "obsidian",
-      ankiConnectPermission: false,
-      zettelkastenCardsIdentificationMode: false,
-    };
   }
 
   private generateCards(activeFile: TFile) {
