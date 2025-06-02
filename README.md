@@ -52,3 +52,39 @@ The wiki explains in detail [how to use it](https://github.com/reuseman/flashcar
 
 ## Contributing
 Contributions via bug reports, bug fixes, are welcome. If you have ideas about features to be implemented, please open an issue so we can discuss the best way to implement it. For more details check [Contributing.md](docs/CONTRIBUTING.md)
+
+## Roadmap
+- [ ] Adapting extension core to the Zettelkasten method
+   - [ ] Sync whole vault or specific deck to Anki
+   - [ ] Delete tag capture logic
+   - [ ] Join reverse and spaced card logic
+   - [ ] Change cloze card logic capture with changing {cloze} to backlinks
+- [ ] Test-Coverage
+   - [ ] Core logic
+      - [ ] Regex unit tests (src/conf/regex.ts)
+      - [ ] Settings defaults/validation
+      - [ ] Utility helpers (src/utils.ts)
+   - [ ] Card classes (maybe will be changed)
+   - [ ] Parser combinations
+      - [ ] Context-aware ON / OFF
+      - [ ] Source link ON / OFF
+      - [ ] Code highlight ON / OFF
+      - [ ] Inline-ID ON / OFF
+   - [ ] Edge-case fixtures
+      - [ ] Deep headings
+      - [ ] Math + code blocks
+      - [ ] Broken links & huge files
+   - [ ] Integration layers
+      - [ ] Mock Obsidian API (unit tests)
+      - [ ] Mock AnkiConnect HTTP endpoint
+   - [ ] UI / command tests
+      - [ ] Command-palette registration
+      - [ ] Settings change reactions
+   - [ ] Performance guard
+      - [ ] Fail test if generateFlashcards on 2 MB sample > N ms
+   - [ ] Mutation & quality
+      - [ ] Add Stryker mutation testing
+      - [ ] Gradually raise Jest coverageThreshold
+   - [ ] CI & docs
+      - [ ] GitHub Actions (Node 18/20 on Linux/Mac/Win)
+      - [ ] PR template requires green tests
