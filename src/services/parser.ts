@@ -46,10 +46,6 @@ export class Parser {
     cards = cards.concat(this.generateSpacedCards(file, headings, deck, vault, note, globalTags));
     cards = cards.concat(this.generateClozeCards(file, headings, deck, vault, note, globalTags));
 
-    if (cards.length === 0 && this.settings.zettelkastenCardsIdentificationMode) {
-      cards = cards.concat(this.generateZettelkastenCards(file, deck, vault, note, globalTags));
-    }
-
     // Filter out cards that are fully inside a code block, a math block or a math inline block
     const codeBlocks = [...file.matchAll(this.regex.obsidianCodeBlock)];
     const mathBlocks = [...file.matchAll(this.regex.mathBlock)];
@@ -407,41 +403,6 @@ export class Parser {
     }
 
     return cards;
-  }
-
-  private generateZettelkastenCards(
-    file: string,
-    deck: string,
-    vault: string,
-    note: string,
-    globalTags: string[] = [],
-  ) {
-    const embedMap = this.getEmbedMap();
-    const question = note;
-    const answer = this.getEmbedWrapContent(embedMap, file);
-    let medias = this.getImageLinks(answer);
-    medias = medias.concat(this.getAudioLinks(answer));
-    const fields: any = { Front: question, Back: answer };
-    if (this.settings.sourceSupport) {
-      fields["Source"] = this.substituteSourceLink(note, vault);
-    }
-    const containsCode = this.containsCode([question, answer]);
-
-    const card = new Flashcard(
-      -1,
-      deck,
-      question,
-      fields,
-      true,
-      0,
-      file.length,
-      globalTags,
-      false,
-      medias,
-      containsCode,
-    );
-
-    return [card];
   }
 
   public containsCode(str: string[]): boolean {

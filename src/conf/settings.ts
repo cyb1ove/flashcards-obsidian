@@ -11,7 +11,6 @@ export interface ISettings {
   inlineSeparatorReverse: string;
   defaultAnkiTag: string;
   ankiConnectPermission: boolean;
-  zettelkastenCardsIdentificationMode: boolean;
 }
 
 export const defaultSettings: ISettings = {
@@ -27,5 +26,4 @@ export const defaultSettings: ISettings = {
   inlineSeparatorReverse: ":::",
   defaultAnkiTag: "obsidian",
   ankiConnectPermission: false,
-  zettelkastenCardsIdentificationMode: false,
 };
