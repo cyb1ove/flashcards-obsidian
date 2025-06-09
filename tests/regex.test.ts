@@ -16,11 +16,7 @@ describe("Regex Patterns", () => {
     });
 
     it("should not match invalid headings", () => {
-      const invalidHeadings = [
-        "#Invalid", // no space after #
-        "    #### Too much indentation",
-        "No hash mark",
-      ];
+      const invalidHeadings = ["#Invalid", "    #### Too much indentation", "No hash mark"];
 
       invalidHeadings.forEach((heading) => {
         regex.headingsRegex.lastIndex = 0; // Reset regex state for global flag
