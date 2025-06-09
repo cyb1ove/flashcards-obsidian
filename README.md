@@ -58,7 +58,7 @@ Contributions via bug reports, bug fixes, are welcome. If you have ideas about f
    - [ ] Sync whole vault or specific deck to Anki
    - [ ] Delete tag capture logic
    - [ ] Join reverse and spaced card logic
-   - [ ] Change cloze card logic capture to capture backlinks like {cloze} patthernt
+   - [ ] Change cloze card logic capture to capture backlinks like {cloze} pattern
 - [ ] Test-Coverage
    - [ ] Core logic
       - [ ] Regex unit tests (src/conf/regex.ts)
