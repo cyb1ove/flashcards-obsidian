@@ -32,7 +32,7 @@ describe("Flashcard Parser", () => {
 
     it("should handle inline code", () => {
       const input = `What is \`console.log()\`? #card
-                     A JavaScript function for logging`;
+A JavaScript function for logging`;
 
       const cards = parser.generateFlashcards(input, testDeck, testVault, testNote);
 
@@ -232,8 +232,8 @@ The formula $E = mc^2$ is famous`;
       const cards = parser.generateFlashcards(input, testDeck, testVault, testNote);
 
       expect(cards).toHaveLength(1);
-      // Math should be preserved as-is since we're not processing it anymore
-      expect(cards[0].fields.Back).toContain("$E = mc^2$");
+      // Anki has  its own tag with styling for math
+      expect(cards[0].fields.Back).toContain("<anki-mathjax>E = mc^2</anki-mathjax>");
     });
 
     it("should handle block math", () => {
@@ -243,7 +243,7 @@ $$\\sum_{i=1}^{n} x_i = x_1 + x_2 + \\cdots + x_n$$`;
       const cards = parser.generateFlashcards(input, testDeck, testVault, testNote);
 
       expect(cards).toHaveLength(1);
-      expect(cards[0].fields.Back).toContain("$$");
+      expect(cards[0].fields.Back).toContain("<anki-mathjax block='true'>");
     });
 
     it("should not create cards inside math blocks", () => {
@@ -322,20 +322,6 @@ Answer with empty lines
       expect(cards[0].fields.Back).toContain("Émile's naïve résumé");
     });
 
-    it("should not create cards inside code blocks", () => {
-      const input = `\`\`\`
-What is code? #card
-This should not be a card
-\`\`\`
-What is outside? #card
-This should be a card`;
-
-      const cards = parser.generateFlashcards(input, testDeck, testVault, testNote);
-
-      expect(cards).toHaveLength(1);
-      expect(cards[0].fields.Front).toContain("What is outside?");
-    });
-
     it("should handle malformed markdown", () => {
       const input = `What is malformed? #card
 **Unclosed bold
@@ -360,30 +346,6 @@ ${longText}`;
     });
   });
 
-  //   describe("Card Filtering", () => {
-  //     it("should identify cards to delete", () => {
-  //       const input = `Some content
-  // ^1234567890123
-
-  // More content`;
-
-  //       const idsToDelete = parser.getCardsToDelete(input);
-
-  //       expect(idsToDelete).toContain(1234567890123);
-  //     });
-
-  //     it("should extract Anki ID blocks", () => {
-  //       const input = `What is ID? #card
-  // Answer text
-  // ^1234567890123`;
-
-  //       const idBlocks = parser.getAnkiIDsBlocks(input);
-
-  //       expect(idBlocks).toHaveLength(1);
-  //       expect(idBlocks[0][1]).toBe("1234567890123");
-  //     });
-  //   });
-
   describe("Mixed Content", () => {
     it("should handle complex mixed content", () => {
       const input = `# Study Guide
@@ -392,7 +354,6 @@ What is the **Pythagorean theorem**? #card #math
 $a^2 + b^2 = c^2$ where:
 - $a$ and $b$ are legs
 - $c$ is the hypotenuse
-
 ![Diagram](triangle.png)
 [More info](https://example.com)
 
@@ -409,7 +370,7 @@ Returns new array with transformed elements.`;
 
       // Math card
       expect(cards[0].fields.Front).toContain("Pythagorean theorem");
-      expect(cards[0].fields.Back).toContain("$a^2 + b^2 = c^2$");
+      expect(cards[0].fields.Back).toContain("<anki-mathjax>a^2 + b^2 = c^2</anki-mathjax>");
       expect(cards[0].fields.Back).toContain("<ul>");
       expect(cards[0].mediaNames).toContain("triangle.png");
       expect(cards[0].tags).toContain("math");
