@@ -486,11 +486,11 @@ export class Parser {
 
   private mathToAnki(str: string) {
     str = str.replace(this.regex.mathBlock, function (match, p1, p2) {
-      return "\\\\[" + escapeMarkdown(p2) + " \\\\]";
+      return "<anki-mathjax block='true'>" + p2 + "</anki-mathjax>";
     });
 
     str = str.replace(this.regex.mathInline, function (match, p1, p2) {
-      return "\\\\(" + escapeMarkdown(p2) + "\\\\)";
+      return "<anki-mathjax>" + p2 + "</anki-mathjax>";
     });
 
     return str;
