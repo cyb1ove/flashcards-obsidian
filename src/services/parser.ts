@@ -18,7 +18,6 @@ export class Parser {
     this.htmlConverter = new showdown.Converter();
     this.htmlConverter.setOption("simplifiedAutoLink", true);
     this.htmlConverter.setOption("tables", true);
-    this.htmlConverter.setOption("tasks", true);
     this.htmlConverter.setOption("strikethrough", true);
     this.htmlConverter.setOption("ghCodeBlocks", true);
     this.htmlConverter.setOption("requireSpaceBeforeHeadingText", true);
