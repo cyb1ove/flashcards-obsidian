@@ -5,7 +5,6 @@ import { Flashcard } from "../entities/flashcard";
 import { Inlinecard } from "src/entities/inlinecard";
 import { Spacedcard } from "src/entities/spacedcard";
 import { Clozecard } from "src/entities/clozecard";
-import { escapeMarkdown } from "src/utils";
 
 export class Parser {
   private regex: Regex;
@@ -459,12 +458,11 @@ export class Parser {
   }
 
   private substituteObsidianLinks(str: string, vaultName: string) {
-    const linkRegex = /\[\[(.+?)(?:\|(.+?))?\]\]/gim;
     vaultName = encodeURIComponent(vaultName);
 
-    return str.replace(linkRegex, (match, filename, rename) => {
+    return str.replace(this.regex.backlinkRegex, (match, filename, rename) => {
       const href = `obsidian://open?vault=${vaultName}&file=${encodeURIComponent(filename)}.md`;
-      const fileRename = rename ? rename : filename;
+      const fileRename = rename || filename;
       return `<a href="${href}">${fileRename}</a>`;
     });
   }

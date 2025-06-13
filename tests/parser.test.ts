@@ -224,6 +224,20 @@ With multiple lines`;
     });
   });
 
+  describe("Backlink", () => {
+    it("should handle backlinks", () => {
+      const input = `What is a backlink? #card
+[[Other Note]]`;
+
+      const cards = parser.generateFlashcards(input, testDeck, testVault, testNote);
+
+      expect(cards).toHaveLength(1);
+      expect(cards[0].fields.Back).toContain("<a href=");
+      expect(cards[0].fields.Back).toContain("obsidian://open?vault=");
+      expect(cards[0].fields.Back).toContain("Other%20Note.md");
+    });
+  });
+
   describe("Math/LaTeX", () => {
     it("should handle inline math", () => {
       const input = `What is inline math? #card

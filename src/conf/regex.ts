@@ -21,6 +21,7 @@ export class Regex {
   singleClozeCurly: RegExp;
   singleClozeHighlight: RegExp;
   clozeHighlight: RegExp;
+  backlinkRegex: RegExp;
 
   embedBlock: RegExp;
 
@@ -37,6 +38,7 @@ export class Regex {
     this.markdownImageLinks = /!\[.*\]\((.*\.(?:png|jpg|jpeg|gif|bmp|svg|tiff)).*?\)/gim;
 
     this.wikiAudioLinks = /!\[\[(.*\.(?:mp3|webm|wav|m4a|ogg|3gp|flac)).*?\]\]/gim;
+    this.backlinkRegex = /\[\[(.+?)(?:\|(.+?))?\]\]/gim;
 
     // https://regex101.com/r/eqnJeW/1
     this.obsidianCodeBlock = /(?:```(?:.*?\n?)+?```)(?:\n|$)/gim;
