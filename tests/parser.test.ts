@@ -135,7 +135,7 @@ With multiple lines`;
 
       expect(cards).toHaveLength(1);
       expect(cards[0].fields.Back).toContain("<img");
-      expect(cards[0].fields.Back).toContain("src='image.png'");
+      expect(cards[0].fields.Back).toContain('src="image.png"');
       expect(cards[0].mediaNames).toContain("image.png");
     });
 

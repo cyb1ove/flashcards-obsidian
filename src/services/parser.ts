@@ -420,14 +420,13 @@ export class Parser {
   }
 
   private parseLine(str: string, vaultName: string) {
-    return this.htmlConverter.makeHtml(
-      this.mathToAnki(
-        this.substituteObsidianLinks(
-          this.substituteImageLinks(this.substituteAudioLinks(str)),
-          vaultName,
-        ),
-      ),
-    );
+    let parsedStr;
+
+    parsedStr = this.substituteObsidianLinks(str, vaultName);
+    parsedStr = this.mathToAnki(parsedStr);
+    parsedStr = this.htmlConverter.makeHtml(parsedStr);
+
+    return parsedStr;
   }
 
   private getImageLinks(str: string) {
@@ -467,19 +466,8 @@ export class Parser {
     });
   }
 
-  private substituteImageLinks(str: string): string {
-    str = str.replace(this.regex.wikiImageLinks, "<img src='$1'>");
-    str = str.replace(this.regex.markdownImageLinks, "<img src='$1'>");
-
-    return str;
-  }
-
   private substituteSourceLink(source: string, vaultName: string): string {
     return this.substituteObsidianLinks(`[[${source}|Source]]`, vaultName);
-  }
-
-  private substituteAudioLinks(str: string): string {
-    return str.replace(this.regex.wikiAudioLinks, "[sound:$1]");
   }
 
   private mathToAnki(str: string) {
